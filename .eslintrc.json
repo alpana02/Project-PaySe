@@ -1,0 +1,6 @@
+{
+  "extends": [
+    "plugin:react/jsx-runtime",
+    "plugin:@next/next/recommended"
+  ]
+}
