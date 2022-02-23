@@ -1,15 +1,15 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { ChakraProvider } from "@chakra-ui/react";
 import { DefaultSeo } from "next-seo";
-import type { AppProps } from "next/app";
 import Head from "next/head";
 
 import defaultSEOConfig from "../../next-seo.config";
 import Layout from "lib/components/layout";
 import customTheme from "lib/styles/customTheme";
 import "lib/styles/globals.css";
+import { AuthUserProvider } from "../lib/auth/AuthContext";
 
-const MyApp = ({ Component, pageProps }: AppProps) => {
+const MyApp = ({ Component, pageProps }) => {
   return (
     <ChakraProvider theme={customTheme}>
       <Head>
@@ -19,9 +19,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         />
       </Head>
       <DefaultSeo {...defaultSEOConfig} />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <AuthUserProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </AuthUserProvider>
     </ChakraProvider>
   );
 };

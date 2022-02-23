@@ -9,7 +9,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": false,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -21,7 +21,10 @@
     "incremental": true
   },
   "include": [
-  ],
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+, "src/lib/pages/404/index.jsx", "src/lib/components/motion/Box.jsx"  ],
   "exclude": [
     "node_modules"
   ]
