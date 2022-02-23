@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 
-import SomeImage from "lib/components/samples/SomeImage";
+import SomeImage from "../../components/samples/SomeImage";
 
 const Home = () => {
   return (
