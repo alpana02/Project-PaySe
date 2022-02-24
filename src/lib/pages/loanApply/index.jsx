@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FormControl,
   FormLabel,
@@ -9,7 +9,7 @@ import {
   Select,
   VStack,
   Stack,
-  useColorMode
+  useColorMode,
 } from "@chakra-ui/react";
 import {
   Accordion,
@@ -18,24 +18,59 @@ import {
   AccordionPanel,
   AccordionIcon,
   Box,
-} from '@chakra-ui/react'
+} from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 import { Button, ButtonGroup } from "@chakra-ui/react";
+import db from "../../../config/firebase";
+import { collection, addDoc } from "firebase/firestore";
+
 
 export default function loanApply() {
-  const {colorMode}= useColorMode()
+  const { colorMode } = useColorMode();
+  const [consentObj, setconsent] = useState({
+    number: "9660489414",
+    consentMode: "STORE",
+    consentTypes: ["TRANSACTIONS"],
+    FIDataRangefrom: "2023-04-01T00:00:00Z",
+    FIDataRangeto: "2023-10-01T00:00:00Z",
+    Frequencyvalue: 30,
+    Frequencyunit: "MONTH",
+  });
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    // console.log("here");
+    // console.log(JSON.stringify(consentObj));
+    // const response = await fetch(`https://fiu-uat.setu.co/consents`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "x-client-id": "04504f40-0ec0-4f4a-b3cf-65fe2353787f",
+    //     "x-client-secret": "498e05ea-2790-475a-8fb6-47fdfb4b2585",
+    //   },
+
+    //   mode: "no-cors",
+    //   body: JSON.stringify(consentObj),
+    // });
+    // console.log(response);
+    
+  };
+
   return (
     <div>
-      <Heading as="h2" size="xl"  isTruncated>
+      <Heading as="h2" size="xl" isTruncated>
         Loan Application form
       </Heading>
-      <form>
+      <form onSubmit={handleSubmit}>
         <Accordion allowToggle mt={10}>
-          <AccordionItem py={5} bgColor={colorMode==="dark"?"#2d1a60":"#2C7A7B"} >
+          <AccordionItem
+            py={5}
+            bgColor={colorMode === "dark" ? "#2d1a60" : "#2C7A7B"}
+          >
             <h2>
               <AccordionButton>
-                <Box flex='1' textAlign='left'>
+                <Box flex="1" textAlign="left">
                   <Heading as="h5" size="md">
                     Personal Details
                   </Heading>
@@ -47,7 +82,11 @@ export default function loanApply() {
               <HStack mt={4}>
                 <FormControl>
                   <FormLabel htmlFor="name">Name</FormLabel>
-                  <Input name="name" type="text" placeholder="Name of Applicant" />
+                  <Input
+                    name="name"
+                    type="text"
+                    placeholder="Name of Applicant"
+                  />
                 </FormControl>
                 <FormControl>
                   <FormLabel htmlFor="number">Number</FormLabel>
@@ -55,15 +94,22 @@ export default function loanApply() {
                     name="number"
                     type="number"
                     placeholder="bank attached number"
+                    onChange={(e) => {
+                      setconsent({ ...consentObj, number: e.target.value });
+                    }}
                   />
                 </FormControl>
                 <FormControl>
                   <FormLabel htmlFor="dob">Date of Birth</FormLabel>
                   <Input name="dob" type="date" />
                 </FormControl>
-                <FormControl isRequired>
+                <FormControl>
                   <FormLabel htmlFor="pan">PAN</FormLabel>
-                  <Input name="pan" type="number" placeholder="PAN Card number" />
+                  <Input
+                    name="pan"
+                    type="number"
+                    placeholder="PAN Card number"
+                  />
                 </FormControl>
               </HStack>
             </AccordionPanel>
@@ -72,7 +118,7 @@ export default function loanApply() {
           <AccordionItem py={5}>
             <h2>
               <AccordionButton>
-                <Box flex='1' textAlign='left'>
+                <Box flex="1" textAlign="left">
                   <Heading as="h4" size="md" isTruncated>
                     Loan Details
                   </Heading>
@@ -84,23 +130,30 @@ export default function loanApply() {
               <HStack mt={4}>
                 <FormControl>
                   <FormLabel htmlFor="amount">Amount</FormLabel>
-                  <Input name="amount" type="number" placeholder="Loan Amount in INR" />
+                  <Input
+                    name="amount"
+                    type="number"
+                    placeholder="Loan Amount in INR"
+                  />
                 </FormControl>
                 <FormControl>
                   <FormLabel htmlFor="tenure">Tenure</FormLabel>
                   <Input name="tenure" type="number" placeholder="in Months" />
                 </FormControl>
-                <FormControl isRequired>
+                <FormControl>
                   <FormLabel htmlFor="emi">EMI</FormLabel>
                   <Input name="emi" type="number" placeholder="in INR" />
                 </FormControl>
               </HStack>
             </AccordionPanel>
           </AccordionItem>
-          <AccordionItem py={5} bgColor={colorMode==="dark"?"#2d1a60":"#2C7A7B"}>
+          <AccordionItem
+            py={5}
+            bgColor={colorMode === "dark" ? "#2d1a60" : "#2C7A7B"}
+          >
             <h2>
               <AccordionButton>
-                <Box flex='1' textAlign='left'>
+                <Box flex="1" textAlign="left">
                   <Heading as="h5" size="md" isTruncated>
                     Consent Details
                   </Heading>
@@ -116,11 +169,29 @@ export default function loanApply() {
                 <HStack mt={3}>
                   <FormControl>
                     <FormLabel htmlFor="from">From</FormLabel>
-                    <Input name="from" type="date" />
+                    <Input
+                      name="from"
+                      type="date"
+                      onChange={(e) => {
+                        setconsent({
+                          ...consentObj,
+                          Frequencyvalue: e.target.value,
+                        });
+                      }}
+                    />
                   </FormControl>
                   <FormControl>
                     <FormLabel htmlFor="funit">Unit</FormLabel>
-                    <Select name="funit" placeholder="Select option">
+                    <Select
+                      name="funit"
+                      placeholder="Select option"
+                      onChange={(e) => {
+                        setconsent({
+                          ...consentObj,
+                          Frequencyunit: e.target.value,
+                        });
+                      }}
+                    >
                       <option value="HOURLY">HOURLY</option>
                       <option value="DAILY">DAILY</option>
                       <option value="MONTHLY">MONTHLY</option>
@@ -137,18 +208,38 @@ export default function loanApply() {
                 <HStack mt={3}>
                   <FormControl>
                     <FormLabel htmlFor="fifrom">From</FormLabel>
-                    <Input name="fifrom" type="date" />
+                    <Input
+                      name="fifrom"
+                      type="date"
+                      onChange={(e) => {
+                        setconsent({
+                          ...consentObj,
+                          FIDataRangefrom: e.target.value,
+                        });
+                      }}
+                    />
                   </FormControl>
                   <FormControl>
                     <FormLabel htmlFor="fito">To</FormLabel>
-                    <Input name="fito" type="date" />
+                    <Input
+                      name="fito"
+                      type="date"
+                      onChange={(e) => {
+                        setconsent({
+                          ...consentObj,
+                          FIDataRangeto: e.target.value,
+                        });
+                      }}
+                    />
                   </FormControl>
                   <FormControl>
                     <FormLabel htmlFor="fiType">FI Type</FormLabel>
                     <Select name="fiType" placeholder="Select mode">
                       <option value="DEPOSIT">DEPOSIT</option>
                       <option value="MUTUAL_FUNDS">MUTUAL_FUNDS</option>
-                      <option value="INSURANCE_POLICIES">INSURANCE_POLICIES</option>
+                      <option value="INSURANCE_POLICIES">
+                        INSURANCE_POLICIES
+                      </option>
                       <option value="EQUITIES">EQUITIES</option>
                     </Select>
                   </FormControl>
@@ -156,7 +247,8 @@ export default function loanApply() {
               </Stack>
               <Stack mt={8}>
                 <Text fontSize="md">
-                  Consent: Mode & Time period for consent validity for data fetching
+                  Consent: Mode & Time period for consent validity for data
+                  fetching
                 </Text>
                 <HStack mt={3}>
                   <FormControl>
@@ -169,7 +261,16 @@ export default function loanApply() {
                   </FormControl>
                   <FormControl>
                     <FormLabel htmlFor="cmode">Consent Mode</FormLabel>
-                    <Select name="cmode" placeholder="Select mode">
+                    <Select
+                      name="cmode"
+                      placeholder="Select mode"
+                      onChange={(e) => {
+                        setconsent({
+                          ...consentObj,
+                          consentMode: e.target.value,
+                        });
+                      }}
+                    >
                       <option value="VIEW">VIEW</option>
                       <option value="STORE">STORE</option>
                       <option value="QUERY">QUERY</option>
@@ -178,7 +279,16 @@ export default function loanApply() {
                   </FormControl>
                   <FormControl>
                     <FormLabel htmlFor="cmode">Consent Type</FormLabel>
-                    <Select name="cmode" placeholder="Select type">
+                    <Select
+                      name="cmode"
+                      placeholder="Select type"
+                      onChange={(e) => {
+                        setconsent({
+                          ...consentObj,
+                          consentTypes: e.target.value,
+                        });
+                      }}
+                    >
                       <option value="PROFILE">PROFILE</option>
                       <option value="SUMMARY">SUMMARY</option>
                       <option value="TRANSACTIONS">TRANSACTIONS</option>
@@ -187,7 +297,9 @@ export default function loanApply() {
                 </HStack>
               </Stack>
               <Stack mt={8}>
-                <Text fontSize="md">Account Data: Type, Purpose and time period</Text>
+                <Text fontSize="md">
+                  Account Data: Type, Purpose and time period
+                </Text>
                 <HStack mt={3}>
                   <FormControl>
                     <FormLabel htmlFor="fetchtype">Data Fetch Type</FormLabel>
@@ -197,7 +309,9 @@ export default function loanApply() {
                     </Select>
                   </FormControl>
                   <FormControl>
-                    <FormLabel htmlFor="purpose">Purpose of data request</FormLabel>
+                    <FormLabel htmlFor="purpose">
+                      Purpose of data request
+                    </FormLabel>
                     <Select name="purpose" placeholder="Select purpose">
                       <option value="101">Wealth management service</option>
                       <option value="102">Budget</option>
@@ -206,7 +320,8 @@ export default function loanApply() {
                         Explicit consent to monitor the accounts
                       </option>
                       <option value="105">
-                        Explicit one-time consent for accessing data from the accounts
+                        Explicit one-time consent for accessing data from the
+                        accounts
                       </option>
                     </Select>
                   </FormControl>
@@ -214,10 +329,16 @@ export default function loanApply() {
                     <FormLabel htmlFor="datalife">
                       Time period to store data
                     </FormLabel>
-                    <Input name="datalife" type="number" placeholder="Store data for" />
+                    <Input
+                      name="datalife"
+                      type="number"
+                      placeholder="Store data for"
+                    />
                   </FormControl>
                   <FormControl>
-                    <FormLabel htmlFor="datalifeunit">Time period Unit</FormLabel>
+                    <FormLabel htmlFor="datalifeunit">
+                      Time period Unit
+                    </FormLabel>
                     <Select name="datalifeunit" placeholder="Select Data Life">
                       <option value="MONTH">MONTH</option>
                       <option value="PERIODIC">YEAR</option>
@@ -227,17 +348,16 @@ export default function loanApply() {
                   </FormControl>
                 </HStack>
               </Stack>
-
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
-        <Stack direction='row' spacing={4} align='center'>
+        <Stack direction="row" spacing={4} align="center">
           <Button
             colorScheme="cyan"
             variant="solid"
             type="submit"
             mt={4}
-            mx='auto'
+            mx="auto"
           >
             Submit
           </Button>

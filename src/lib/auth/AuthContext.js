@@ -5,8 +5,10 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "../../config/firebase";
+import Router from "next/router";
 
 const provider = new GoogleAuthProvider();
+
 
 const authContextDefaultValues = {
   user: null,
@@ -38,6 +40,7 @@ export function AuthProvider({ children }) {
         const user = result.user;
         console.log({ credential, token, user });
         setUser(true);
+        Router.push('/bank')
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -48,6 +51,7 @@ export function AuthProvider({ children }) {
         const credential = GoogleAuthProvider.credentialFromError(error);
         console.log({ errorCode, errorMessage, email, credential });
       });
+      
   };
 
   const logout = () => {
