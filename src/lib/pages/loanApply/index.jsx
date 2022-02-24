@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Router from "next/router";
 import {
   FormControl,
   FormLabel,
@@ -10,51 +11,63 @@ import {
   VStack,
   Stack,
   useColorMode,
-} from "@chakra-ui/react";
-import {
   Accordion,
   AccordionItem,
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
   Box,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Heading,
+  Text,
+  Button,
+  ButtonGroup,
 } from "@chakra-ui/react";
-import { Heading } from "@chakra-ui/react";
-import { Text } from "@chakra-ui/react";
-import { Button, ButtonGroup } from "@chakra-ui/react";
-import db from "../../../config/firebase";
 import { collection, addDoc } from "firebase/firestore";
-
+import { db } from "../../../config/firebase";
 
 export default function loanApply() {
   const { colorMode } = useColorMode();
   const [consentObj, setconsent] = useState({
-    number: "9660489414",
+    loanamount: "30000",
+    number: "7978060742",
     consentMode: "STORE",
-    consentTypes: ["TRANSACTIONS"],
-    FIDataRangefrom: "2023-04-01T00:00:00Z",
-    FIDataRangeto: "2023-10-01T00:00:00Z",
+    consentTypes: "TRANSACTIONS",
+    FIDataRangefrom: "2021-01-24T00:00:00.000Z",
+    FIDataRangeto: "2021-11-24T00:00:00.000Z",
     Frequencyvalue: 30,
     Frequencyunit: "MONTH",
   });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // console.log("here");
-    // console.log(JSON.stringify(consentObj));
-    // const response = await fetch(`https://fiu-uat.setu.co/consents`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "x-client-id": "04504f40-0ec0-4f4a-b3cf-65fe2353787f",
-    //     "x-client-secret": "498e05ea-2790-475a-8fb6-47fdfb4b2585",
-    //   },
-
-    //   mode: "no-cors",
-    //   body: JSON.stringify(consentObj),
-    // });
-    // console.log(response);
-    
+    console.log(JSON.stringify(consentObj));
+    try {
+      const response = await fetch(
+        `http://localhost:5000/consent/createconsent`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(consentObj),
+        }
+      );
+      const json = await response.json();
+      if ("errorCode" in json) {
+        console.log(json);
+        return;
+      } else {
+        const docRef = await addDoc(collection(db, "userLoanData"), json);
+        console.log("Document written with ID: ", docRef.id);
+        Router.push("/dashboard");
+      }
+    } catch (error) {
+      console.log("error occured in submitting" + error);
+    }
   };
 
   return (
@@ -134,6 +147,9 @@ export default function loanApply() {
                     name="amount"
                     type="number"
                     placeholder="Loan Amount in INR"
+                    onChange={(e) => {
+                      setconsent({ ...consentObj, loanamount: e.target.value });
+                    }}
                   />
                 </FormControl>
                 <FormControl>
@@ -168,10 +184,10 @@ export default function loanApply() {
                 </Text>
                 <HStack mt={3}>
                   <FormControl>
-                    <FormLabel htmlFor="from">From</FormLabel>
+                    <FormLabel htmlFor="from">Value</FormLabel>
                     <Input
-                      name="from"
-                      type="date"
+                      name="frquencyvalue"
+                      type="number"
                       onChange={(e) => {
                         setconsent({
                           ...consentObj,
@@ -192,10 +208,10 @@ export default function loanApply() {
                         });
                       }}
                     >
-                      <option value="HOURLY">HOURLY</option>
-                      <option value="DAILY">DAILY</option>
-                      <option value="MONTHLY">MONTHLY</option>
-                      <option value="YEARLY">YEARLY</option>
+                      <option value="HOUR">HOURLY</option>
+                      <option value="DAIL">DAILY</option>
+                      <option value="MONTH">MONTHLY</option>
+                      <option value="YEAR">YEARLY</option>
                     </Select>
                   </FormControl>
                 </HStack>
