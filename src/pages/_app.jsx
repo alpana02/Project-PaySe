@@ -7,7 +7,7 @@ import defaultSEOConfig from "../../next-seo.config";
 import Layout from "lib/components/layout";
 import customTheme from "lib/styles/customTheme";
 import "lib/styles/globals.css";
-import { AuthUserProvider } from "../lib/auth/AuthContext";
+import { AuthProvider } from "../lib/auth/AuthContext";
 
 const MyApp = ({ Component, pageProps }) => {
   return (
@@ -19,11 +19,11 @@ const MyApp = ({ Component, pageProps }) => {
         />
       </Head>
       <DefaultSeo {...defaultSEOConfig} />
-      <AuthUserProvider>
+      <AuthProvider>
         <Layout>
           <Component {...pageProps} />
         </Layout>
-      </AuthUserProvider>
+      </AuthProvider>
     </ChakraProvider>
   );
 };
