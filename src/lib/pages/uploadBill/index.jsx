@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Router from "next/router";
+
 import {
   Box,
   Heading,
@@ -9,6 +11,8 @@ import {
   SimpleGrid,
   Button,
 } from "@chakra-ui/react";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../../../config/firebase";
 
 function UploadBillForm() {
   const [data, setData] = useState({
@@ -22,9 +26,12 @@ function UploadBillForm() {
     ainc: 0,
     targ: 0,
   });
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(data);
+    const docRef = await addDoc(collection(db, "unbankedLoan"), data);
+    console.log("Document written with ID: ", docRef.id);
+    Router.push("/dashboard");
   };
   return (
     <Box>

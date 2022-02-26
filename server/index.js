@@ -3,7 +3,6 @@ const cors = require('cors')
 const app = express();
 const port = 5000;
 
-
 // For parsing application/json
 app.use(express.json());
 
@@ -19,8 +18,6 @@ app.get("/", function (req, res) {
 
 //Available routes
 app.use("/consent", require("./routes/consent"));
-
-
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
