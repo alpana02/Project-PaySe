@@ -19,7 +19,6 @@ const StyledBox = styled(Box)`
 `;
 
 const BillDetails = ({
-  index,
   age,
   mstatus,
   deps,
@@ -33,7 +32,7 @@ const BillDetails = ({
   const { colorMode } = useColorMode();
   return (
     <StyledBox bgColor={colorMode === "dark" ? "#553c9a" : "#D6BCFA"}>
-      <Heading>{`Bill ${index + 1}`}</Heading>
+      <Heading>Bill</Heading>
       <Text>{`Age: ${age}`}</Text>
       <Text>{`Marital Status: ${mstatus}`}</Text>
       <Text>{`Dependents: ${deps}`}</Text>
@@ -70,21 +69,23 @@ function BillsDashboard() {
   return (
     <Box>
       <Heading>Your Bills</Heading>
-      {details.map((item, idx) => (
-        <BillDetails
-          key={idx}
-          index={idx}
-          age={item.age}
-          ainc={item.ainc}
-          aos={item.aos}
-          deps={item.deps}
-          eduqual={item.eduqual}
-          mstatus={item.mstatus}
-          targ={item.targ}
-          wexp={item.wexp}
-          wstats={item.wstats}
-        />
-      ))}
+      {details.map(
+        (item, idx) =>
+          item.uid === userId && (
+            <BillDetails
+              key={idx}
+              age={item.age}
+              ainc={item.ainc}
+              aos={item.aos}
+              deps={item.deps}
+              eduqual={item.eduqual}
+              mstatus={item.mstatus}
+              targ={item.targ}
+              wexp={item.wexp}
+              wstats={item.wstats}
+            />
+          )
+      )}
     </Box>
   );
 }
