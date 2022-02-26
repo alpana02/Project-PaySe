@@ -9,11 +9,11 @@ import Router from "next/router";
 
 const provider = new GoogleAuthProvider();
 
-
 const authContextDefaultValues = {
   user: null,
   login: () => {},
   logout: () => {},
+  uid: "",
 };
 export const AuthContext = createContext(authContextDefaultValues);
 
@@ -22,7 +22,7 @@ export function AuthProvider({ children }) {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         const uid = user.uid;
-        console.log({ uid });
+        setUserid(uid);
       } else {
         console.log("no user");
       }
@@ -30,6 +30,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   const [user, setUser] = useState(null);
+  const [userid, setUserid] = useState("");
 
   const login = () => {
     signInWithPopup(auth, provider)
@@ -40,7 +41,7 @@ export function AuthProvider({ children }) {
         const user = result.user;
         console.log({ credential, token, user });
         setUser(true);
-        Router.push('/bank')
+        Router.push('/listofbank')
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -51,7 +52,6 @@ export function AuthProvider({ children }) {
         const credential = GoogleAuthProvider.credentialFromError(error);
         console.log({ errorCode, errorMessage, email, credential });
       });
-      
   };
 
   const logout = () => {
@@ -64,6 +64,7 @@ export function AuthProvider({ children }) {
     user,
     login,
     logout,
+    userid,
   };
 
   return (
