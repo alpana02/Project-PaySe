@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Router from "next/router";
+import { AuthContext } from "../../auth/AuthContext";
+
 import {
   FormControl,
   FormLabel,
@@ -22,8 +24,10 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../../config/firebase";
 
 function UploadBillForm() {
+  const value = useContext(AuthContext);
   const { colorMode } = useColorMode();
   const [data, setData] = useState({
+    uid: value.userid,
     name: "",
     loanamount: "30000",
     number: "7978060742",
@@ -42,7 +46,7 @@ function UploadBillForm() {
     console.log(data);
     const docRef = await addDoc(collection(db, "unbankedLoan"), data);
     console.log("Document written with ID: ", docRef.id);
-    Router.push("/dashboard");
+    Router.push("/bills");
   };
   return (
     <Box>
@@ -99,7 +103,7 @@ function UploadBillForm() {
                       type="number"
                       placeholder="PAN Card number"
                     />
-                  </FormControl> 
+                  </FormControl>
                 </HStack>
               </AccordionPanel>
             </AccordionItem>
