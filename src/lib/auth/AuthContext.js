@@ -41,7 +41,7 @@ export function AuthProvider({ children }) {
         const user = result.user;
         console.log({ credential, token, user });
         setUser(true);
-        Router.push("/");
+        Router.push('/listofbank')
       })
       .catch((error) => {
         const errorCode = error.code;
