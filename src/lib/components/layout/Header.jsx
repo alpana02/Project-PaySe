@@ -2,18 +2,24 @@ import { Box, Flex, Heading, Button } from "@chakra-ui/react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 
-
 const Header = () => {
   return (
     <Flex as="header" width="full" align="center">
       <Heading as="h1" size="md">
         <Link href="/">PaySe</Link>
       </Heading>
-      <p><Link href="/dashboard">&nbsp; &nbsp; &nbsp; Dashboard</Link></p>
-      <div><Link href="/listofbank">&nbsp; &nbsp; &nbsp; List of Bank</Link></div>
-      <div><Link href="/fetchBill">&nbsp; &nbsp; &nbsp; Bills</Link></div>
+      <p>
+        <Link href="/dashboard">&nbsp; &nbsp; &nbsp; Dashboard</Link>
+      </p>
+      <div>
+        <Link href="/listofbank">&nbsp; &nbsp; &nbsp; List of Bank</Link>
+      </div>
+      &nbsp; &nbsp; &nbsp;
+      <div>
+        <Link href="/bills"> Bills</Link>
+      </div>
       <Box marginLeft="auto">
-        <Button >Logout</Button>
+        <Button>Logout</Button>
         <ThemeToggle />
       </Box>
     </Flex>
@@ -47,4 +53,3 @@ export default Header;
 // };
 
 // export default Header;
-
