@@ -34,7 +34,7 @@ import {
 import { db } from "../../../config/firebase";
 import { doc, getDocs, collection, updateDoc } from "firebase/firestore";
 
-const Dashboard = () => {
+const bankdashboard = () => {
   const [loanDoc, setloanDoc] = useState([]);
   const [status, setstatus] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -44,6 +44,36 @@ const Dashboard = () => {
     onClose: onDrawerClose,
   } = useDisclosure();
   const btnRef = React.useRef();
+
+//handlefistatus button
+const handleFIStatus = async (item) => {
+    
+    console.log(JSON.stringify(item));
+    try {
+      const response = await fetch(
+        `http://localhost:5000/consent/createdatasession`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(item),
+        }
+      );
+      const json = await response.json();
+    //   if ("errorCode" in json) {
+    //     console.log(json);
+    //     return;
+    //   } else {
+    //     const docRef = await addDoc(collection(db, "userLoanData"), json);
+    //     console.log("Document written with ID: ", docRef.id);
+    //     Router.push("/dashboard");
+    //   }
+    } catch (error) {
+      console.log("error occured in submitting" + error);
+    }
+  };
+
   const fetchLoan = async () => {
     const querySnapshot = await getDocs(collection(db, "userLoanData"));
     console.log(querySnapshot.docs);
@@ -59,12 +89,12 @@ const Dashboard = () => {
       const json = await response.json();
       if (document.data().status !== json.status) {
         // console.log(document.id);
-        setstatus(json.status);
         const frankDocRef = doc(db, "userLoanData", document.id);
         // To update age and favorite color:
         await updateDoc(frankDocRef, {
           status: json.status,
         });
+        setstatus(json.status);
       }
     });
     setloanDoc(querySnapshot.docs);
@@ -75,46 +105,6 @@ const Dashboard = () => {
 
   return (
     <>
-      <Button
-        ref={btnRef}
-        colorScheme="cyan"
-        size="sm"
-        paddingLeft="25px"
-        paddingRight="25px"
-        onClick={onDrawerOpen}
-      >
-        What is consent Sensetivity and alert
-      </Button>
-      <Drawer
-        isOpen={isDrawerOpen}
-        placement="right"
-        onClose={onDrawerClose}
-        finalFocusRef={btnRef}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Create your account</DrawerHeader>
-
-          <DrawerBody>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum
-          </DrawerBody>
-
-          <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onDrawerClose}>
-              Close
-            </Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
       <Box
         alignItems="center"
         justifyContent="center"
@@ -123,15 +113,17 @@ const Dashboard = () => {
         mb={10}
         w="full"
       >
-          <Heading  as="h3" size="lg"  mb={5} mt={20} >Banked section</Heading> 
-        <Table   variant="striped" colorScheme="purple">
+        <Heading as="h3" size="lg" mb={5} mt={20}>
+          Banked user requests
+        </Heading>
+        <Table variant="striped" colorScheme="purple">
           <Thead>
             <Tr>
-              <Th>Purpose</Th>
-              <Th>FIU</Th>
-              <Th>Date</Th>
-              <Th>Sensetivity</Th>
+              <Th>Customer Id</Th>
+              <Th>Amount</Th>
+              <Th>Consent status</Th>
               <Th>Consent</Th>
+              <Th>FI Stutus</Th>
             </Tr>
           </Thead>
           {loanDoc &&
@@ -140,17 +132,37 @@ const Dashboard = () => {
                 <>
                   <Tbody>
                     <Tr>
-                      <Td>Apna Bank</Td>
-                      <Td>SAP</Td>
-                      <Td>02/02/2022</Td>
-                      <Td>🟡Medium</Td>
+                      <Td>{item.data().Detail.Customer.id.substring(0, 10)}</Td>
+                      <Td>{item.data().Detail.DataFilter[0].value} INR</Td>
+                      <Td>{item.data().status}</Td>
                       <Td>
-                      <Link href={item.data().url} isExternal>
-                      <Button size="sm" colorScheme="red">
-                        {item.data().status}
+                        <Button
+                          size="sm"
+                          colorScheme="red"
+                          isDisabled={
+                            item.data().status === "PENDING" ? false : true
+                          }
+                          onClick={() => {
+                            alert("consent request sent succesfully");
+                          }}
+                        >
+                          Get Consent
                         </Button>
+                      </Td>
+                      <Td>
+                        <Link href={item.data().url} isExternal>
+                          <Button
+                            size="sm"
+                            colorScheme="red"
+                            isDisabled={
+                              item.data().status === "ACTIVE" ? false : true
+                            }
+                            onClick={()=>{handleFIStatus(item.data())}}
+                          >
+                            Get Details
+                          </Button>
                         </Link>
-                        </Td>
+                      </Td>
                       <Modal isOpen={isOpen} onClose={onClose}>
                         <ModalOverlay />
                       </Modal>
@@ -160,7 +172,9 @@ const Dashboard = () => {
               );
             })}
         </Table>
-          <Heading  as="h3" size="lg"  mt={20} mb={5} >Unbanked section</Heading> 
+        <Heading as="h3" size="lg" mt={20} mb={5}>
+          Unbanked user requests
+        </Heading>
         <Table variant="striped" colorScheme="purple">
           <Thead>
             <Tr>
@@ -182,10 +196,7 @@ const Dashboard = () => {
                       <Td>SAP</Td>
                       <Td>02/02/2022</Td>
                       <Td>🟡Medium</Td>
-                      <Td><Button size="sm" colorScheme="red">
-                        {item.data().status}
-                        </Button>
-                        </Td>
+                      <Td>{item.data().status}</Td>
                       <Td>
                         <Link href={item.data().url} isExternal>
                           <Button size="sm" colorScheme="red">
@@ -203,9 +214,8 @@ const Dashboard = () => {
             })}
         </Table>
       </Box>
-      
     </>
   );
 };
 
-export default Dashboard;
+export default bankdashboard;
