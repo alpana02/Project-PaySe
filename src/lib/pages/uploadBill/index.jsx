@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Router from "next/router";
+import { AuthContext } from "../../auth/AuthContext";
 
 import {
   Box,
@@ -15,7 +16,9 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../../config/firebase";
 
 function UploadBillForm() {
+  const value = useContext(AuthContext);
   const [data, setData] = useState({
+    uid: value.userid,
     age: 0,
     mstatus: 0,
     deps: 0,
@@ -31,7 +34,7 @@ function UploadBillForm() {
     console.log(data);
     const docRef = await addDoc(collection(db, "unbankedLoan"), data);
     console.log("Document written with ID: ", docRef.id);
-    Router.push("/dashboard");
+    Router.push("/bills");
   };
   return (
     <Box>
