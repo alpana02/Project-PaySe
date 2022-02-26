@@ -44,6 +44,7 @@ export default function loanApply() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    alert("Loan applied succesfully, bank will send a consent request to you soon. Keep an eye on your dashboard")
     console.log(JSON.stringify(consentObj));
     try {
       const response = await fetch(
@@ -63,7 +64,6 @@ export default function loanApply() {
       } else {
         const docRef = await addDoc(collection(db, "userLoanData"), json);
         console.log("Document written with ID: ", docRef.id);
-        Router.push("/dashboard");
       }
     } catch (error) {
       console.log("error occured in submitting" + error);
@@ -163,209 +163,7 @@ export default function loanApply() {
               </HStack>
             </AccordionPanel>
           </AccordionItem>
-          <AccordionItem
-            py={5}
-            bgColor={colorMode === "dark" ? "#2d1a60" : "#2C7A7B"}
-          >
-            <h2>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  <Heading as="h5" size="md" isTruncated>
-                    Consent Details
-                  </Heading>
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pb={4}>
-              <Stack mt={4}>
-                <Text fontSize="md">
-                  Frequency Information for periodic information access
-                </Text>
-                <HStack mt={3}>
-                  <FormControl>
-                    <FormLabel htmlFor="from">Value</FormLabel>
-                    <Input
-                      name="frquencyvalue"
-                      type="number"
-                      onChange={(e) => {
-                        setconsent({
-                          ...consentObj,
-                          Frequencyvalue: e.target.value,
-                        });
-                      }}
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel htmlFor="funit">Unit</FormLabel>
-                    <Select
-                      name="funit"
-                      placeholder="Select option"
-                      onChange={(e) => {
-                        setconsent({
-                          ...consentObj,
-                          Frequencyunit: e.target.value,
-                        });
-                      }}
-                    >
-                      <option value="HOUR">HOURLY</option>
-                      <option value="DAIL">DAILY</option>
-                      <option value="MONTH">MONTHLY</option>
-                      <option value="YEAR">YEARLY</option>
-                    </Select>
-                  </FormControl>
-                </HStack>
-              </Stack>
-              <Stack mt={8}>
-                <Text fontSize="md">
-                  FI Data Range: Type & date-time range for querying financial
-                  information
-                </Text>
-                <HStack mt={3}>
-                  <FormControl>
-                    <FormLabel htmlFor="fifrom">From</FormLabel>
-                    <Input
-                      name="fifrom"
-                      type="date"
-                      onChange={(e) => {
-                        setconsent({
-                          ...consentObj,
-                          FIDataRangefrom: e.target.value,
-                        });
-                      }}
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel htmlFor="fito">To</FormLabel>
-                    <Input
-                      name="fito"
-                      type="date"
-                      onChange={(e) => {
-                        setconsent({
-                          ...consentObj,
-                          FIDataRangeto: e.target.value,
-                        });
-                      }}
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel htmlFor="fiType">FI Type</FormLabel>
-                    <Select name="fiType" placeholder="Select mode">
-                      <option value="DEPOSIT">DEPOSIT</option>
-                      <option value="MUTUAL_FUNDS">MUTUAL_FUNDS</option>
-                      <option value="INSURANCE_POLICIES">
-                        INSURANCE_POLICIES
-                      </option>
-                      <option value="EQUITIES">EQUITIES</option>
-                    </Select>
-                  </FormControl>
-                </HStack>
-              </Stack>
-              <Stack mt={8}>
-                <Text fontSize="md">
-                  Consent: Mode & Time period for consent validity for data
-                  fetching
-                </Text>
-                <HStack mt={3}>
-                  <FormControl>
-                    <FormLabel htmlFor="cstart">Consent Start</FormLabel>
-                    <Input name="cstart" type="date" />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel htmlFor="cend">Consent Expiry</FormLabel>
-                    <Input name="cend" type="date" />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel htmlFor="cmode">Consent Mode</FormLabel>
-                    <Select
-                      name="cmode"
-                      placeholder="Select mode"
-                      onChange={(e) => {
-                        setconsent({
-                          ...consentObj,
-                          consentMode: e.target.value,
-                        });
-                      }}
-                    >
-                      <option value="VIEW">VIEW</option>
-                      <option value="STORE">STORE</option>
-                      <option value="QUERY">QUERY</option>
-                      <option value="STREAM">STREAM</option>
-                    </Select>
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel htmlFor="cmode">Consent Type</FormLabel>
-                    <Select
-                      name="cmode"
-                      placeholder="Select type"
-                      onChange={(e) => {
-                        setconsent({
-                          ...consentObj,
-                          consentTypes: e.target.value,
-                        });
-                      }}
-                    >
-                      <option value="PROFILE">PROFILE</option>
-                      <option value="SUMMARY">SUMMARY</option>
-                      <option value="TRANSACTIONS">TRANSACTIONS</option>
-                    </Select>
-                  </FormControl>
-                </HStack>
-              </Stack>
-              <Stack mt={8}>
-                <Text fontSize="md">
-                  Account Data: Type, Purpose and time period
-                </Text>
-                <HStack mt={3}>
-                  <FormControl>
-                    <FormLabel htmlFor="fetchtype">Data Fetch Type</FormLabel>
-                    <Select name="fetchtype" placeholder="Select Fetch Type">
-                      <option value="ONETIME">ONETIME</option>
-                      <option value="PERIODIC">PERIODIC</option>
-                    </Select>
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel htmlFor="purpose">
-                      Purpose of data request
-                    </FormLabel>
-                    <Select name="purpose" placeholder="Select purpose">
-                      <option value="101">Wealth management service</option>
-                      <option value="102">Budget</option>
-                      <option value="103">Aggregated statement</option>
-                      <option value="104">
-                        Explicit consent to monitor the accounts
-                      </option>
-                      <option value="105">
-                        Explicit one-time consent for accessing data from the
-                        accounts
-                      </option>
-                    </Select>
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel htmlFor="datalife">
-                      Time period to store data
-                    </FormLabel>
-                    <Input
-                      name="datalife"
-                      type="number"
-                      placeholder="Store data for"
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel htmlFor="datalifeunit">
-                      Time period Unit
-                    </FormLabel>
-                    <Select name="datalifeunit" placeholder="Select Data Life">
-                      <option value="MONTH">MONTH</option>
-                      <option value="PERIODIC">YEAR</option>
-                      <option value="DAY">DAY</option>
-                      <option value="INF">INF</option>
-                    </Select>
-                  </FormControl>
-                </HStack>
-              </Stack>
-            </AccordionPanel>
-          </AccordionItem>
+          
         </Accordion>
         <Stack direction="row" spacing={4} align="center">
           <Button
