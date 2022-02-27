@@ -33,6 +33,8 @@ import {
 } from "@chakra-ui/react";
 import { db } from "../../../config/firebase";
 import { doc, getDocs, collection, updateDoc } from "firebase/firestore";
+import { Flex, } from "@chakra-ui/react";
+import ThemeToggle from "../../components/layout/ThemeToggle";
 
 const Dashboard = () => {
   const [loanDoc, setloanDoc] = useState([]);
@@ -75,6 +77,26 @@ const Dashboard = () => {
 
   return (
     <>
+      <Flex as="header" width="full" align="center">
+        <Heading as="h1" size="md">
+          <Link href="/">PaySe</Link>
+        </Heading>
+        <p>
+          <Link href="/dashboard">&nbsp; &nbsp; &nbsp; Dashboard</Link>
+        </p>
+        <div>
+          <Link href="/listofbank">&nbsp; &nbsp; &nbsp; List of Bank</Link>
+        </div>
+        &nbsp; &nbsp; &nbsp;
+        <div>
+          <Link href="/bills"> Bills</Link>
+        </div>
+        <Box marginLeft="auto">
+          <Button>Logout</Button>&nbsp; &nbsp;
+          <ThemeToggle />
+        </Box>
+      </Flex>
+      <br/>
       <Button
         ref={btnRef}
         colorScheme="cyan"
@@ -123,44 +145,9 @@ const Dashboard = () => {
         mb={10}
         w="full"
       >
-          <Heading  as="h3" size="lg"  mb={5} mt={20} >Banked section</Heading> 
-        <Table   variant="striped" colorScheme="purple">
-          <Thead>
-            <Tr>
-              <Th>Purpose</Th>
-              <Th>FIU</Th>
-              <Th>Date</Th>
-              <Th>Sensetivity</Th>
-              <Th>Consent</Th>
-            </Tr>
-          </Thead>
-          {loanDoc &&
-            loanDoc.map((item) => {
-              return (
-                <>
-                  <Tbody>
-                    <Tr>
-                      <Td>Apna Bank</Td>
-                      <Td>SAP</Td>
-                      <Td>02/02/2022</Td>
-                      <Td>🟡Medium</Td>
-                      <Td>
-                      <Link href={item.data().url} isExternal>
-                      <Button size="sm" colorScheme="red">
-                        {item.data().status}
-                        </Button>
-                        </Link>
-                        </Td>
-                      <Modal isOpen={isOpen} onClose={onClose}>
-                        <ModalOverlay />
-                      </Modal>
-                    </Tr>
-                  </Tbody>
-                </>
-              );
-            })}
-        </Table>
-          <Heading  as="h3" size="lg"  mt={20} mb={5} >Unbanked section</Heading> 
+        <Heading as="h3" size="lg" mb={5} mt={20}>
+          Banked section
+        </Heading>
         <Table variant="striped" colorScheme="purple">
           <Thead>
             <Tr>
@@ -169,7 +156,6 @@ const Dashboard = () => {
               <Th>Date</Th>
               <Th>Sensetivity</Th>
               <Th>Consent</Th>
-              <Th>FI Stutus</Th>
             </Tr>
           </Thead>
           {loanDoc &&
@@ -182,10 +168,6 @@ const Dashboard = () => {
                       <Td>SAP</Td>
                       <Td>02/02/2022</Td>
                       <Td>🟡Medium</Td>
-                      <Td><Button size="sm" colorScheme="red">
-                        {item.data().status}
-                        </Button>
-                        </Td>
                       <Td>
                         <Link href={item.data().url} isExternal>
                           <Button size="sm" colorScheme="red">
@@ -203,7 +185,6 @@ const Dashboard = () => {
             })}
         </Table>
       </Box>
-      
     </>
   );
 };
