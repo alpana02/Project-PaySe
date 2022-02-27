@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <!--From https://codepen.io/frytyler/pen/EGdtg-->
+  <head>
+    <meta charset="UTF-8" />
+    <title>ML API</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/customstyle.css" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Pacifico"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Arimo"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Hind:300"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+
+  <body>
+    <div class="login">
+      <h1>Consent Severity Detection</h1>
+
+      <!-- Main Input For Receiving Query to our ML -->
+      <form action="{{ url_for('severity_score')}}" method="post">
+        <input
+          type="date"
+          name="DATA_RANGE_FROM"
+          placeholder="DATA_RANGE_FROM"
+          required="required"
+        />
+        <input
+          type="date"
+          name="DATA_RANGE_TO"
+          placeholder="DATA_RANGE_TO"
+          required="required"
+        />
+        <input
+          type="text"
+          name="CONSENT_MODE"
+          placeholder="CONSENT_MODE"
+          required="required"
+        />
+        <input
+          type="text"
+          name="CONSENT_TYPE"
+          placeholder="CONSENT_TYPE"
+          required="required"
+        />
+        <input
+          type="text"
+          name="FETCH_TYPE"
+          placeholder="FETCH_TYPE"
+          required="required"
+        />
+        <input
+          type="text"
+          name="FREQUENCY_VALUE"
+          placeholder="FREQUENCY_VALUE"
+          required="required"
+        />
+        <input
+          type="text"
+          name="FI_TYPE"
+          placeholder="FI_TYPE"
+          required="required"
+        />
+
+        <button type="submit" class="btn btn-primary btn-block btn-large">
+          Predict
+        </button>
+      </form>
+
+      <br />
+      <br />
+      <h1>{{severity_text}}</h1>
+    </div>
+  </body>
+</html>

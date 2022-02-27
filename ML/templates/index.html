@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <!--From https://codepen.io/frytyler/pen/EGdtg-->
+  <head>
+    <meta charset="UTF-8" />
+    <title>ML API</title>
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Pacifico"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Arimo"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Hind:300"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+
+  <body>
+    <div class="login">
+      <h1>Loan Approval Prediction based on Alternative Data</h1>
+
+      <!-- Main Input For Receiving Query to our ML -->
+      <form action="{{ url_for('predict_score')}}" method="post">
+        <input type="text" name="Age" placeholder="Age" required="required" />
+
+        <input
+          type="text"
+          name="Marital_Status"
+          placeholder="Marital_Status"
+          required="required"
+        />
+        <input
+          type="text"
+          name="Dependents"
+          placeholder="Dependents"
+          required="required"
+        />
+        <input
+          type="text"
+          name="Work_Experience"
+          placeholder="Work_Experience"
+          required="required"
+        />
+        <input
+          type="text"
+          name="Working_Status"
+          placeholder="Working_Status"
+          required="required"
+        />
+        <input
+          type="text"
+          name="Educational_Qualification"
+          placeholder="Educational_Qualification"
+          required="required"
+        />
+        <input
+          type="text"
+          name="Area_of_Study"
+          placeholder="Area_of_Study"
+          required="required"
+        />
+        <input
+          type="text"
+          name="Annual_Income"
+          placeholder="Annual_Income in lpa"
+          required="required"
+        />
+
+        <button type="submit" class="btn btn-primary btn-block btn-large">
+          Predict
+        </button>
+      </form>
+
+      <div>
+        <p>
+          This credit scoring model is built on the alternative data. Over 2.5
+          billion peoples dont have bank accounts and credit history, so
+          traditional approach to calculate the credit score is impossible for
+          them.
+          <p> But, there is a alternative way to calculate the credit score.
+          We can collect the data from this peoples which is not related to the
+          credit or financial data, and feed it to this model to get a credit
+          score.
+          </p>
+           This alternative data of this peoples could be like married
+          status, childrens, education, job, income, relatives, phone call
+          history, SMS history, digital payment history, neighbors, home
+          address, office address, assets, health, and many more.
+          <p> We are using
+          some of this features, like FEATURES : Age Marital Status : 1 -
+          Married, 0 - Not Married Dependents : Number of dependents (0, 1, 2,
+          3, 4, 5+) Total years of work experience : Number of work experience
+          (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10+) Working Status : Unemployed - 0,
+          Student - 1, Part-Time - 2, Full-Time - 3 Highest education
+          qualification : High School - 0, Bachelor's - 1, Master's - 2,
+          Doctorate - 3 Area of study : Life Sciences - 0, Mathematical Sciences
+          - 1, Humanities - 2, Social Science - 3, Business - 4, Law - 5,
+          Engineering & Technology - 6, Sport - 7
+        </p> 
+        </p>
+      </div>
+
+      <br />
+      <br />
+      
+      <div>
+        <h2>
+          {{prediction_text}}
+        </h2>
+      </div>
+      
+        
+      
+    </div>
+  </body>
+</html>
