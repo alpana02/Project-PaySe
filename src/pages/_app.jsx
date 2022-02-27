@@ -2,7 +2,6 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { DefaultSeo } from "next-seo";
 import Head from "next/head";
-
 import defaultSEOConfig from "../../next-seo.config";
 import Layout from "lib/components/layout";
 import customTheme from "lib/styles/customTheme";
