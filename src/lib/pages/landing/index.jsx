@@ -15,11 +15,36 @@ import {
   ModalCloseButton,
   useDisclosure,
   Lorem,
+  Box,
 } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
+import ThemeToggle from "../../components/layout/ThemeToggle";
+
 
 const landingPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
+    <>
+      <Flex as="header" width="full" align="center">
+        <Heading as="h1" size="md">
+          <Link href="/">PaySe</Link>
+        </Heading>
+        <p>
+          <Link href="/dashboard">&nbsp; &nbsp; &nbsp; Dashboard</Link>
+        </p>
+        <div>
+          <Link href="/listofbank">&nbsp; &nbsp; &nbsp; List of Bank</Link>
+        </div>
+        &nbsp; &nbsp; &nbsp;
+        <div>
+          <Link href="/bills"> Bills</Link>
+        </div>
+        <Box marginLeft="auto">
+          <Button>Logout</Button>&nbsp; &nbsp;
+          <ThemeToggle />
+        </Box>
+      </Flex>
+      <br />
     <div className="container">
       <Stack spacing={10}>
         <Heading as="h2" size="xl" isTruncated>
@@ -170,6 +195,7 @@ const landingPage = () => {
         </Grid>
       </Stack>
     </div>
+    </>
   );
 };
 export default landingPage;

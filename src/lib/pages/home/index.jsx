@@ -16,7 +16,6 @@ const Home = () => {
       w="full"
     >
       <Login />
-      <SomeImage />
     </Box>
   );
 };
