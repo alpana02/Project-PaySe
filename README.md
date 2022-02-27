@@ -7,7 +7,6 @@
 
 ![Main Page](https://devfolio-prod.s3.ap-south-1.amazonaws.com/hackathons/5e79796f6c5e448d979a181b7237b6f7/projects/da92d502df184e2fabfe119da7abce05/1d50cd61-a5ac-4c61-a774-0370b347cd85.png)
 
-## 🔗 Watch Live Demo [[Click Here](https://youtu.be/YXNwc9x4FRc)]
 
 ## ℹ️ What is PaySe?
 PaySe is a platform that proposes a way to implement AA framework using Setu API & Leverage AI/ML models to prevent consent frauds alongside providing credit to the unbanked using Alternate Data.
